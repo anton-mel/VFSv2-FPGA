@@ -1,0 +1,69 @@
+Source Petalinux and Bootgen
+----------------------------------
+source /home/helios/Petalinux/2024.1/settings.sh
+export PATH="/home/helios/bootgen/:$PATH"
+source /home/helios/Xilinx/Vivado_Lab/2024.2/settings64.sh
+
+To change hardware design
+----------------------------------
+1. export the new .xsa file to the project folder
+2. Go to that project folder
+3. petalinux-config --get-hw-description ./<name of .xsa file>
+4. petalinux-build
+5. petalinux-package boot --u-boot --force
+
+To program fpga with jtag
+----------------------------------
+1.Disconnect all FPGAs except the one you need to boot
+2.petalinux-boot jtag --kernel
+
+To check serial
+----------------------------------
+sudo picocom -b 115200 /dev/ttyUSB4 (USB4 for leaf, USB1 for root)
+or sudo screen /dev/ttyUSB1 115200 (CtrlA + K to exit)
+use petalinux login name to set up the password
+use ifconfig after booting to find the ip
+ip addr show eth0 | grep inet | grep -v inet6 | awk '{print $2}' | cut -d/ -f1
+
+To transfer kernel modules (leaf/root driver)
+----------------------------------
+In the original terminal calling petalinux boot
+scp build/tmp/sysroots-components/versal_generic_xcvm1802/leaf-driver/lib/modules/6.6.10-xilinx-v2024.1-g3af4295e00ef/updates/leaf-driver.ko petalinux@10.66.187.20:/home/petalinux
+scp build/tmp/sysroots-components/versal_generic_xcvm1802/root-driver/lib/modules/6.6.10-xilinx-v2024.1-g3af4295e00ef/updates/root-driver.ko petalinux@10.66.76.50:/home/petalinux
+
+C code for root driver
+----------------------------------
+~/Petalinux/vfs_v2/vfs_v2_root/project-spec/meta-user/recipes-modules/root-driver/files
+
+to rebuild module: 
+In the ~/Petalinux/vfs_v2/vfs_v2_root
+petalinux-build -c root-driver
+
+Adding a new BRAM to any design
+----------------------------------
+The added BRAM will be reflected in 
+~/Petalinux/vfs_v2/vfs_v2_root/components/plnx_workspace/device-tree/device-tree/pl.dtsi
+No changes are needed to that file.
+In the file ~/Petalinux/vfs_v2/vfs_v2_root/project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi
+Change the compatible to the correct driver
+
+C code for leaf data generaotr
+----------------------------------
+USe the readme file at ~/Petalinux/vfs_v2/vfs_v2_leaf/project-spec/meta-user/recipes-apps/datagenerator
+```
+How to change application code
+===================================
+Code needs to be cross-compiled before building 
+
+1. cd ./project-spec/meta-user/recipes-apps/datagenerator/files/
+2. aarch64-linux-gnu-gcc configuration.c random_seeds.c -o config -lm
+3. aarch64-linux-gnu-gcc main.c random_seeds.c -o main -lm
+4. petalinux-build
+```
+
+Build the leaf driver as same as the root driver
+
+
+
+
+

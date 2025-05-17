@@ -1,0 +1,18 @@
+menu "user packages " 
+config datagenerator  
+	 bool "datagenerator"
+	 help
+	
+config gpio-demo  
+	 bool "gpio-demo"
+	 help
+	
+config leaf-driver  
+	 bool "leaf-driver"
+	 help
+	
+config peekpoke  
+	 bool "peekpoke"
+	 help
+	
+endmenu

@@ -1,0 +1,15 @@
+/include/ "system-conf.dtsi"
+/ {
+};
+
+&axi_bram_ctrl_rec {
+	compatible = "xlnx,axi-bram-ctrl-receive";
+};
+
+&axi_bram_ctrl_send {
+	compatible = "xlnx,axi-bram-ctrl-send";
+};
+
+&axi_bram_ctrl_status {
+	compatible = "xlnx,axi-bram-ctrl-status";
+};
