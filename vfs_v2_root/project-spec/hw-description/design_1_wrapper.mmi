@@ -61,7 +61,7 @@
         <BitLayout_PortB pattern="p0_d8_p0_d8"/>
         <Parity ON="false" NumBits="0"/>
       </BRAM>
-      <BRAM MemType="RAMB36" Placement="X2Y73" Read_Width_A="18" Read_Width_B="18" SLR_INDEX="0">
+      <BRAM MemType="RAMB36" Placement="X2Y75" Read_Width_A="18" Read_Width_B="18" SLR_INDEX="0">
         <DataWidth_PortA MSB="31" LSB="16"/>
         <AddressRange_PortA Begin="0" End="2047"/>
         <BitLayout_PortA pattern="p0_d8_p0_d8"/>
@@ -70,7 +70,7 @@
         <BitLayout_PortB pattern="p0_d8_p0_d8"/>
         <Parity ON="false" NumBits="0"/>
       </BRAM>
-      <BRAM MemType="RAMB36" Placement="X2Y75" Read_Width_A="18" Read_Width_B="18" SLR_INDEX="0">
+      <BRAM MemType="RAMB36" Placement="X2Y77" Read_Width_A="18" Read_Width_B="18" SLR_INDEX="0">
         <DataWidth_PortA MSB="47" LSB="32"/>
         <AddressRange_PortA Begin="0" End="2047"/>
         <BitLayout_PortA pattern="p0_d8_p0_d8"/>
@@ -92,7 +92,7 @@
   </MemoryArray>
   <MemoryArray InstPath="design_1_i/rec_bram/inst/gen_xpm.gen_base.xpm_memory_base_inst" MemoryPrimitive="block" MemoryConfiguration="enabled_configuration">
     <MemoryLayout Name="design_1_i/rec_bram/inst/gen_xpm.gen_base.xpm_memory_base_inst" CoreMemory_Width="64" MemoryType="RAM_TDP">
-      <BRAM MemType="RAMB36" Placement="X4Y64" Read_Width_A="18" Read_Width_B="18" SLR_INDEX="0">
+      <BRAM MemType="RAMB36" Placement="X3Y63" Read_Width_A="18" Read_Width_B="18" SLR_INDEX="0">
         <DataWidth_PortA MSB="15" LSB="0"/>
         <AddressRange_PortA Begin="0" End="2047"/>
         <BitLayout_PortA pattern="p0_d8_p0_d8"/>
@@ -110,7 +110,7 @@
         <BitLayout_PortB pattern="p0_d8_p0_d8"/>
         <Parity ON="false" NumBits="0"/>
       </BRAM>
-      <BRAM MemType="RAMB36" Placement="X3Y63" Read_Width_A="18" Read_Width_B="18" SLR_INDEX="0">
+      <BRAM MemType="RAMB36" Placement="X4Y64" Read_Width_A="18" Read_Width_B="18" SLR_INDEX="0">
         <DataWidth_PortA MSB="47" LSB="32"/>
         <AddressRange_PortA Begin="0" End="2047"/>
         <BitLayout_PortA pattern="p0_d8_p0_d8"/>

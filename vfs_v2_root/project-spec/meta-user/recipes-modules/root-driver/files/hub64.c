@@ -53,10 +53,6 @@ MODULE_DESCRIPTION
 #define DRIVER2_NAME "sbramdriver"
 #define DRIVER3_NAME "rbramdriver"
 
-// for the file IO
-#define INPUT_OFFSET   0x00  // Input data address (64-bit)
-#define OUTPUT_OFFSET  0x08  // Output data address (next 64-bit slot)
-
 void __iomem  *bram1_addr; // Global variable for base_addr of BRAM 1 linked to root
 void __iomem  *sbram_addr; // Global variable for base_addr of BRAM 2 linked to FPGA1
 void __iomem  *rbram_addr; // Global variable for base_addr of BRAM 2 linked to FPGA1
@@ -1028,7 +1024,7 @@ static ssize_t generate_measurements(struct file *file, const char __user *user_
 
     line = input;
 
-    while (sscanf(line, "%lu", &node_id) == 1) {
+    while (sscanf(line, "%llu", &node_id) == 1) {
         pr_info("Processing node ID: %lu\n", node_id);
 
         // Generate the message
@@ -1133,6 +1129,7 @@ static ssize_t start_decoding(struct file *file, const char __user *user_buffer,
 
 static const struct proc_ops input_fops = {
     .proc_write = input_write,
+    .proc_read  = output_read,
 };
 
 static const struct proc_ops output_fops = {
@@ -1242,7 +1239,7 @@ static int add_root_hub(void){
 
     // Add new input/output files
     root->parameter_entries[5] = proc_create("input", 0666, root->proc_entry, &input_fops);
-    root->parameter_entries[6] = proc_create("output", 0444, root->proc_entry, &output_fops);
+    // root->parameter_entries[6] = proc_create("output", 0444, root->proc_entry, &output_fops);
     printk(KERN_INFO "I/O created\n");
 
 	return 0;
@@ -1428,27 +1425,22 @@ static ssize_t input_write(struct file *file,
     uint64_t val;
     int ret;
 
-    /* guard against bogus buffer or unmapped BRAM */
-    if (!bram1_addr) {
-        pr_err("paragon: BRAM not mapped!\n");
-        return -ENODEV;
-    }
-    if (count == 0 || count > sizeof(buf)-1)
+    if (count >= sizeof(buf))
         return -EINVAL;
 
-    /* copy and NUL-terminate */
+    if (!bram1_addr)
+        return -ENODEV;
+    
     if (copy_from_user(buf, usr_buf, count))
         return -EFAULT;
     buf[count] = '\0';
 
-    /* parse a single 64-bit value */
-    ret = kstrtou64(buf, 0, &val);
-    if (ret)
-        return ret;
+    if (kstrtou64(buf, 0, &val))
+        return -EINVAL;
 
-    /* write it into BRAM */
-    iowrite64(val, bram1_addr);
-    pr_info("paragon: wrote 0x%016llx to INPUT\n", val);
+    /* BRAM write */
+    iowrite64(val, bram1_addr); // no offset
+    printk(KERN_INFO "Wrote 0x%016llx to input BRAM\n", val);
 
     return count;
 }
@@ -1457,22 +1449,18 @@ static ssize_t output_read(struct file *file,
                            char __user *usr_buf,
                            size_t count, loff_t *pos)
 {
-    char buf[32];
+    char buf[64];
     uint64_t val;
     int len;
 
-    /* one‐shot read (so cat only prints once) */
     if (*pos > 0)
         return 0;
 
-    if (!bram1_addr) {
-        pr_err("paragon: BRAM not mapped!\n");
+    if (!bram1_addr)
         return -ENODEV;
-    }
 
-    /* fetch result */
-    val = ioread64(bram1_addr + OUTPUT_OFFSET);
-    pr_info("paragon: read  0x%016llx from OUTPUT\n", val);
+    val = ioread64(bram1_addr + 8);
+    printk(KERN_INFO "Read 0x%016llx from output BRAM\n", val);
 
     /* format as decimal + newline */
     len = snprintf(buf, sizeof(buf), "%llu\n", val);
