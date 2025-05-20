@@ -9,7 +9,7 @@ INHIBIT_PACKAGE_STRIP = "1"
 
 SRC_URI = "file://Makefile \
            file://hub64.c \
-	   file://COPYING \
+	       file://COPYING \
           "
 
 S = "${WORKDIR}"

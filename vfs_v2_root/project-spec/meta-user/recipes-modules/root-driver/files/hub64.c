@@ -1129,7 +1129,6 @@ static ssize_t start_decoding(struct file *file, const char __user *user_buffer,
 
 static const struct proc_ops input_fops = {
     .proc_write = input_write,
-    .proc_read  = output_read,
 };
 
 static const struct proc_ops output_fops = {
@@ -1239,7 +1238,7 @@ static int add_root_hub(void){
 
     // Add new input/output files
     root->parameter_entries[5] = proc_create("input", 0666, root->proc_entry, &input_fops);
-    // root->parameter_entries[6] = proc_create("output", 0444, root->proc_entry, &output_fops);
+    root->parameter_entries[6] = proc_create("output", 0444, root->proc_entry, &output_fops);
     printk(KERN_INFO "I/O created\n");
 
 	return 0;
@@ -1440,7 +1439,7 @@ static ssize_t input_write(struct file *file,
 
     /* BRAM write */
     iowrite64(val, bram1_addr); // no offset
-    printk(KERN_INFO "Wrote 0x%016llx to input BRAM\n", val);
+    // printk(KERN_INFO "Wrote 0x%016llx to input BRAM\n", val);
 
     return count;
 }
@@ -1460,7 +1459,7 @@ static ssize_t output_read(struct file *file,
         return -ENODEV;
 
     val = ioread64(bram1_addr + 8);
-    printk(KERN_INFO "Read 0x%016llx from output BRAM\n", val);
+    // printk(KERN_INFO "Read 0x%016llx from output BRAM\n", val);
 
     /* format as decimal + newline */
     len = snprintf(buf, sizeof(buf), "%llu\n", val);
