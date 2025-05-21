@@ -1,7 +1,15 @@
 #ifndef TREE_H
 #define TREE_H
 
+#include <linux/kernel.h>
+#include <linux/init.h>
+#include <linux/module.h>
 #include <linux/proc_fs.h>
+#include <linux/seq_file.h>
+#include <linux/uaccess.h>
+#include <linux/kthread.h>
+#include <linux/delay.h>
+#include <linux/io.h>
 #include <linux/fs.h>
 
 #include "../bram/status/status_bram.h"
@@ -24,11 +32,12 @@ struct paragon_tree_node {
 // Function declarations
 int paragon_tree_init(void);
 int add_root_hub(void);
-// int add_hub_process(int id, int child_index);
-// void delete_node(int id);
-// void delete_tree(struct paragon_tree_node *node);
-// struct paragon_tree_node* find_node_by_id(struct paragon_tree_node *node, int id);
-// struct paragon_tree_node* find_parent(struct paragon_tree_node *node, int id);
-// struct paragon_tree_node* create_node(struct paragon_tree_node *parent, int child_index);
+int add_hub_process(int id, int child_index);
+void delete_node(int id);
+void delete_tree(struct paragon_tree_node *node);
+
+struct paragon_tree_node* find_node_by_id(struct paragon_tree_node *node, int id);
+struct paragon_tree_node* find_parent(struct paragon_tree_node *node, int id);
+struct paragon_tree_node* create_node(struct paragon_tree_node *parent, int child_index);
 
 #endif /* TREE_H */ 

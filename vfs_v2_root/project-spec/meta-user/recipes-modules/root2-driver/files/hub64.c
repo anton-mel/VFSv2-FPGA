@@ -43,6 +43,12 @@ static int __init paragon_module_init(void) {
     }
 
     paragon_tree_init();
+    add_root_hub();
+
+    for (int i = 0; i < 2; i++) { 
+        // Statically create 2 children for the root
+        add_hub_process(root->node_id, i);
+    }
 
     printk(KERN_INFO "Paragon Module Initialized\n");
 
@@ -56,8 +62,8 @@ static int __init paragon_module_init(void) {
 }
 
 static void __exit paragon_module_exit(void) {
-    // delete_tree(root);
-    // printk(KERN_ALERT "Tree removed\n");
+    delete_tree(root);
+    printk(KERN_ALERT "Tree removed\n");
     // Remove the /proc/Paragon directory
     proc_remove(paragon_dir);
     printk(KERN_ALERT "Paragon removed\n");

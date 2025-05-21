@@ -18,8 +18,14 @@ SRC_URI = "file://Makefile \
            file://vfs/tree.h \
            file://aux/ip.c \
            file://aux/ip.h \
-           file://fops/proc.c \
-           file://fops/proc.h \
+           file://fops/bram/bram_fops.c \
+           file://fops/bram/bram_fops.h \
+           file://fops/status/status_fops.c \
+           file://fops/status/status_fops.h \
+           file://fops/mult/mult_fops.c \
+           file://fops/mult/mult_fops.h \
+           file://fops/testing/test_fops.c \
+           file://fops/testing/test_fops.h \
            file://hub64.c \
            file://COPYING \
           "

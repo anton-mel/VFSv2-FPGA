@@ -6,7 +6,10 @@ root2-driver-objs := \
 	bram/receiver/receive_bram.o \
 	vfs/tree.o \
 	aux/ip.o \
-	fops/proc.o
+	fops/bram/bram_fops.o \
+	fops/status/status_fops.o \
+	fops/mult/mult_fops.o \
+	fops/testing/test_fops.o
 
 MY_CFLAGS += -g -DDEBUG
 ccflags-y += ${MY_CFLAGS}

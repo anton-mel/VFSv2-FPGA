@@ -1513,7 +1513,6 @@ static int __init paragon_module_init(void) {
     platform_driver_register(&sbram_driver);
     platform_driver_register(&rbram_driver);
 
-
     return 0;
 }
 
